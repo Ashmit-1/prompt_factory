@@ -48,9 +48,9 @@
 
 .nav-segmented {
   display: flex;
-  background: var(--card-bg);
+  background: var(--bg-color);
   padding: 4px;
-  border-radius: 8px;
+  border-radius: 4px;
   border: 1px solid var(--border-color);
 }
 
@@ -64,13 +64,13 @@
   font-weight: 500;
   color: var(--text-secondary);
   transition: all 0.2s ease;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 
 .nav-tab.active {
-  background: var(--border-color);
-  color: var(--text-primary);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  background: var(--text-primary);
+  color: var(--bg-color);
+  border-radius: 4px;
 }
 
 .header-right {
@@ -81,7 +81,7 @@
 
 .header-btn {
   background: transparent;
-  color: var(--text-secondary);
+  color: var(--text-primary);
   border: 1px solid var(--border-color);
   padding: 6px 12px;
   font-family: var(--font-main);
@@ -90,10 +90,10 @@
   transition: all 0.2s ease;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 
 .header-btn:hover {
-  color: var(--text-primary);
-  border-color: var(--text-primary);
+  background: var(--text-primary);
+  color: var(--bg-color);
 }

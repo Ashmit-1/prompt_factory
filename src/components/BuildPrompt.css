@@ -4,6 +4,7 @@
   flex-direction: column;
   height: calc(100vh - var(--header-height));
   color: var(--text-primary);
+  background-color: var(--bg-color);
 }
 
 .build-prompt-header {
@@ -22,35 +23,32 @@
   background: var(--input-bg);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
-  border-radius: 8px;
+  border-radius: 4px;
   outline: none;
   width: 60%;
   padding: 0.6rem 1rem;
-  transition: border-color 0.2s;
+  transition: opacity 0.2s;
 }
 
 .prompt-name-input:focus {
-  border-color: var(--accent-color);
+  opacity: 0.8;
 }
 
 .save-button {
   font-family: var(--font-main);
-  background: var(--accent-color);
-  color: #000;
-  border: none;
+  background: var(--text-primary);
+  color: var(--bg-color);
+  border: 1px solid var(--border-color);
   padding: 0.7rem 1.5rem;
   cursor: pointer;
   font-weight: 600;
-  border-radius: 8px;
-  transition: transform 0.1s, opacity 0.2s;
+  border-radius: 4px;
+  transition: all 0.2s;
 }
 
 .save-button:hover {
-  opacity: 0.9;
-}
-
-.save-button:active {
-  transform: scale(0.98);
+  background: var(--bg-color);
+  color: var(--text-primary);
 }
 
 .build-prompt-grid {
@@ -88,12 +86,12 @@
   font-weight: 500;
   color: var(--text-secondary);
   transition: all 0.2s;
-  border-radius: 6px;
+  border-radius: 4px;
 }
 
 .tab-button.active {
-  background: var(--card-bg);
-  color: var(--text-primary);
+  background: var(--text-primary);
+  color: var(--bg-color);
   border: 1px solid var(--border-color);
 }
 
@@ -111,18 +109,13 @@
 }
 
 .block-card {
-  background: var(--card-bg);
+  background: var(--bg-color);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 4px;
   padding: 1.2rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  transition: border-color 0.2s;
-}
-
-.block-card:hover {
-  border-color: #475569;
 }
 
 .block-card-header {
@@ -145,7 +138,7 @@
 }
 
 .block-title:focus {
-  border-bottom-color: var(--accent-color);
+  border-bottom-color: var(--text-primary);
 }
 
 .block-controls {
@@ -155,7 +148,7 @@
 
 .block-controls button {
   background: var(--bg-color);
-  color: var(--text-secondary);
+  color: var(--text-primary);
   border: 1px solid var(--border-color);
   cursor: pointer;
   padding: 0.3rem 0.6rem;
@@ -165,8 +158,8 @@
 }
 
 .block-controls button:hover:not(:disabled) {
-  color: var(--text-primary);
-  border-color: var(--text-primary);
+  background: var(--text-primary);
+  color: var(--bg-color);
 }
 
 .block-controls button:disabled {
@@ -179,17 +172,16 @@
   width: 100%;
   min-height: 120px;
   padding: 0.8rem;
-  background: var(--input-bg);
+  background: var(--bg-color);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
-  border-radius: 6px;
+  border-radius: 4px;
   resize: vertical;
   outline: none;
-  transition: border-color 0.2s;
 }
 
 .block-content:focus {
-  border-color: var(--accent-color);
+  border-color: var(--text-primary);
 }
 
 .add-block-btn {
@@ -201,12 +193,12 @@
   text-align: center;
   font-weight: 500;
   color: var(--text-secondary);
-  border-radius: 8px;
+  border-radius: 4px;
   transition: all 0.2s;
 }
 
 .add-block-btn:hover {
-  border-color: var(--accent-color);
+  border-color: var(--text-primary);
   color: var(--text-primary);
 }
 
@@ -240,22 +232,22 @@
   font-family: var(--font-main);
   font-weight: 500;
   width: 160px;
-  color: var(--accent-color);
+  color: var(--text-primary);
 }
 
 .variable-value {
   font-family: var(--font-main);
   flex: 1;
   padding: 0.6rem;
-  background: var(--input-bg);
+  background: var(--bg-color);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
-  border-radius: 6px;
+  border-radius: 4px;
   outline: none;
 }
 
 .variable-value:focus {
-  border-color: var(--accent-color);
+  border-color: var(--text-primary);
 }
 
 /* Preview Column */
@@ -285,20 +277,20 @@
 
 .copy-btn {
   font-family: var(--font-main);
-  background: var(--card-bg);
+  background: var(--bg-color);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
   padding: 0.5rem 1.2rem;
   cursor: pointer;
   font-size: 0.8rem;
   font-weight: 600;
-  border-radius: 6px;
+  border-radius: 4px;
   transition: all 0.2s;
 }
 
 .copy-btn:hover {
-  background: var(--border-color);
-  border-color: var(--text-primary);
+  background: var(--text-primary);
+  color: var(--bg-color);
 }
 
 .markdown-preview {
@@ -311,6 +303,7 @@
   line-height: 1.6;
   white-space: pre-wrap;
   word-wrap: break-word;
+  text-align: left;
 }
 
 /* Modal */
@@ -320,7 +313,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0,0,0,0.8);
   backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
@@ -329,9 +322,9 @@
 }
 
 .save-modal {
-  background: var(--card-bg);
+  background: var(--bg-color);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: 4px;
   padding: 2rem;
   max-width: 500px;
   width: 90%;
@@ -339,7 +332,6 @@
   flex-direction: column;
   gap: 1.5rem;
   color: var(--text-primary);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
 }
 
 .save-modal h3 {
@@ -363,31 +355,31 @@
 .version-option input {
   font-family: var(--font-main);
   padding: 0.6rem;
-  background: var(--input-bg);
+  background: var(--bg-color);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
-  border-radius: 6px;
+  border-radius: 4px;
 }
 
 .save-modal button {
   font-family: var(--font-main);
   padding: 0.8rem;
   cursor: pointer;
-  background: var(--accent-color);
-  color: #000;
-  border: none;
-  border-radius: 8px;
+  background: var(--text-primary);
+  color: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
   font-weight: 600;
   transition: opacity 0.2s;
 }
 
 .save-modal button:hover {
-  opacity: 0.9;
+  opacity: 0.8;
 }
 
 .close-modal {
-  background: var(--border-color) !important;
-  color: var(--text-secondary) !important;
+  background: var(--bg-color) !important;
+  color: var(--text-primary) !important;
 }
 
 /* Responsiveness */
