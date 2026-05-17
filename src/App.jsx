@@ -45,7 +45,11 @@ function App() {
 
   return (
     <div className="app-container">
-      {username && <GlobalHeader onHomeClick={() => setView('home')} />}
+      {username && <GlobalHeader 
+        onHomeClick={() => setView('home')} 
+        currentView={view} 
+        setView={setView} 
+      />}
       {!username && <OnboardingModal onSave={handleSetUsername} />}
       {username && view === 'home' && <Home username={username} onBuildPrompt={() => setView('build')} />}
       {username && view === 'build' && <BuildPrompt onBack={() => setView('home')} />}

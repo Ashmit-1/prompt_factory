@@ -1,10 +1,13 @@
 :root {
-  --bg-color: #000000;
-  --text-color: #ffffff;
-  --accent-color: #ffffff;
-  --secondary-bg: #1a1a1a;
-  --border-color: #333333;
+  --bg-color: #0f172a;
+  --card-bg: #1e293b;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --accent-color: #38bdf8;
+  --border-color: #334155;
+  --input-bg: #0f172a;
   --font-main: 'Roboto', sans-serif;
+  --header-height: 64px;
 }
 
 * {
@@ -24,9 +27,7 @@ body {
 
 .app-container {
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: block;
 }
 
 .loading-screen {

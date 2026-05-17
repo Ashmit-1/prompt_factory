@@ -2,16 +2,13 @@ import React, { useRef } from 'react';
 import localforage from 'localforage';
 import './GlobalHeader.css';
 
-const GlobalHeader = ({ onHomeClick }) => {
+const GlobalHeader = ({ onHomeClick, currentView, setView }) => {
   const fileInputRef = useRef(null);
 
   const handleExport = async () => {
     try {
-      // Get all keys from localForage
       const keys = await localforage.keys();
       const data = {};
-      
-      // Fetch values for all keys
       await Promise.all(
         keys.map(async (key) => {
           const value = await localforage.getItem(key);
@@ -30,8 +27,6 @@ const GlobalHeader = ({ onHomeClick }) => {
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
-      
-      console.log('Data exported successfully');
     } catch (error) {
       console.error('Export failed:', error);
       alert('Failed to export data.');
@@ -50,23 +45,19 @@ const GlobalHeader = ({ onHomeClick }) => {
     reader.onload = async (event) => {
       try {
         const json = JSON.parse(event.target.result);
-        
-        // Clear current data or merge? The requirement says "overwrite or hydrate". 
-        // We'll merge for safety but overwrite matching keys.
         const keys = Object.keys(json);
         await Promise.all(
           keys.map(key => localforage.setItem(key, json[key]))
         );
-
         alert('Data imported successfully! Refreshing...');
-        window.location.reload(); // Refresh to update UI state with new data
+        window.location.reload();
       } catch (error) {
         console.error('Import failed:', error);
         alert('Invalid JSON file.');
       }
     };
     reader.readAsText(file);
-    e.target.value = ''; // Reset input
+    e.target.value = '';
   };
 
   return (
@@ -78,6 +69,29 @@ const GlobalHeader = ({ onHomeClick }) => {
         </div>
       </div>
       
+      <div className="header-center">
+        <div className="nav-segmented">
+          <button 
+            className={`nav-tab ${currentView === 'home' ? 'active' : ''}`} 
+            onClick={() => setView('home')}
+          >
+            Home
+          </button>
+          <button 
+            className={`nav-tab ${currentView === 'build' ? 'active' : ''}`} 
+            onClick={() => setView('build')}
+          >
+            Build Prompt
+          </button>
+          <button 
+            className={`nav-tab ${currentView === 'library' ? 'active' : ''}`} 
+            onClick={() => setView('library')}
+          >
+            Prompt Library
+          </button>
+        </div>
+      </div>
+
       <div className="header-right">
         <button className="header-btn" onClick={handleExport}>Export Data</button>
         <button className="header-btn" onClick={handleImportClick}>Import Data</button>
