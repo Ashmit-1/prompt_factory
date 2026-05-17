@@ -1,13 +1,13 @@
 import React from 'react';
 import './Home.css';
 
-const Home = ({ username, onBuildPrompt }) => {
+const Home = ({ username, onBuildPrompt, onVisitLibrary }) => {
   const handleBuildPrompt = () => {
     onBuildPrompt();
   };
 
   const handleVisitLibrary = () => {
-    console.log('Navigating to Prompt Library...');
+    onVisitLibrary();
   };
 
   return (

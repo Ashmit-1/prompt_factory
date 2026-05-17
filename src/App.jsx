@@ -54,7 +54,7 @@ function App() {
         setView={setView} 
       />}
       {!username && <OnboardingModal onSave={handleSetUsername} />}
-      {username && view === 'home' && <Home username={username} onBuildPrompt={() => setView('build')} />}
+      {username && view === 'home' && <Home username={username} onBuildPrompt={() => setView('build')} onVisitLibrary={() => setView('library')} />}
       {username && view === 'build' && (
         <BuildPrompt 
           onBack={() => {
