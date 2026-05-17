@@ -50,6 +50,38 @@ const PromptLibrary = ({ onEditPrompt }) => {
     return combinedText.substring(0, 120) + '...';
   };
 
+  // --- Delete Logic ---
+  const handleDelete = async (e, prompt, index) => {
+    e.stopPropagation(); // Prevent triggering the card click edit routing
+
+    if (!window.confirm(`Are you sure you want to delete "${prompt.name}"?`)) {
+      return;
+    }
+
+    try {
+      const currentPrompts = await localforage.getItem('pf_prompts') || [];
+      
+      // Use reference equality to find the exact object in the main array
+      const actualIndex = currentPrompts.findIndex(p => p === prompt);
+      
+      if (actualIndex !== -1) {
+        const updatedPrompts = currentPrompts.filter((_, i) => i !== actualIndex);
+        await localforage.setItem('pf_prompts', updatedPrompts);
+        setAllPrompts(updatedPrompts);
+      } else {
+        // Fallback: filter by name and version if reference equality fails across storage cycles
+        const updatedPrompts = currentPrompts.filter(p => 
+          !(p.name === prompt.name && p.version === prompt.version)
+        );
+        await localforage.setItem('pf_prompts', updatedPrompts);
+        setAllPrompts(updatedPrompts);
+      }
+    } catch (error) {
+      console.error('Error deleting prompt:', error);
+      alert('Failed to delete prompt. Please try again.');
+    }
+  };
+
   // --- Clipboard Copy Logic ---
   const handleCopy = async (e, prompt) => {
     e.stopPropagation(); // Prevent triggering the card click edit routing
@@ -107,8 +139,17 @@ const PromptLibrary = ({ onEditPrompt }) => {
               className="prompt-card" 
               onClick={() => onEditPrompt(prompt)}
             >
-              <div className="card-content">
+              <div className="card-header">
                 <h3 className="card-title">{prompt.name}</h3>
+                <button 
+                  className="card-delete-btn" 
+                  onClick={(e) => handleDelete(e, prompt, index)}
+                  title="Delete Prompt"
+                >
+                  🗑️
+                </button>
+              </div>
+              <div className="card-content">
                 <p className="card-snippet">{getCleanSnippet(prompt.blocks)}</p>
               </div>
               <div className="card-footer">
