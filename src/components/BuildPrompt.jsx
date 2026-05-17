@@ -10,13 +10,22 @@ const DEFAULT_BLOCKS = [
   { id: "5", title: "Output Format", content: "" },
 ];
 
-const BuildPrompt = ({ onBack }) => {
-  const [promptName, setPromptName] = useState("");
-  const [blocks, setBlocks] = useState(DEFAULT_BLOCKS);
-  const [variables, setVariables] = useState({});
+const BuildPrompt = ({ onBack, initialData }) => {
+  const [promptName, setPromptName] = useState(initialData?.name || "");
+  const [blocks, setBlocks] = useState(initialData?.blocks || DEFAULT_BLOCKS);
+  const [variables, setVariables] = useState(initialData?.variables || {});
   const [activeTab, setActiveTab] = useState("prompt"); // 'prompt' | 'variables'
   const [copyStatus, setCopyStatus] = useState("Copy Prompt");
   const [showSaveModal, setShowSaveModal] = useState(false);
+
+  // Sync state if initialData changes (for hydration when clicking a library card)
+  useEffect(() => {
+    if (initialData) {
+      setPromptName(initialData.name);
+      setBlocks(initialData.blocks);
+      setVariables(initialData.variables || {});
+    }
+  }, [initialData]);
 
   // --- Block Logic ---
   const updateBlock = (id, field, value) => {

@@ -4,11 +4,14 @@ import Home from './components/Home';
 import OnboardingModal from './components/OnboardingModal';
 import GlobalHeader from './components/GlobalHeader';
 import BuildPrompt from './components/BuildPrompt';
+import PromptLibrary from './components/PromptLibrary';
 
 function App() {
   const [username, setUsername] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [view, setView] = useState('home');
+
+  const [selectedPrompt, setSelectedPrompt] = useState(null);
 
   useEffect(() => {
     async function checkUser() {
@@ -52,7 +55,23 @@ function App() {
       />}
       {!username && <OnboardingModal onSave={handleSetUsername} />}
       {username && view === 'home' && <Home username={username} onBuildPrompt={() => setView('build')} />}
-      {username && view === 'build' && <BuildPrompt onBack={() => setView('home')} />}
+      {username && view === 'build' && (
+        <BuildPrompt 
+          onBack={() => {
+            setView('home');
+            setSelectedPrompt(null);
+          }} 
+          initialData={selectedPrompt}
+        />
+      )}
+      {username && view === 'library' && (
+        <PromptLibrary 
+          onEditPrompt={(prompt) => {
+            setSelectedPrompt(prompt);
+            setView('build');
+          }} 
+        />
+      )}
     </div>
   );
 }
