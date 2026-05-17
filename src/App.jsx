@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import localforage from 'localforage';
 import Home from './components/Home';
 import OnboardingModal from './components/OnboardingModal';
+import GlobalHeader from './components/GlobalHeader';
 
 function App() {
   const [username, setUsername] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [view, setView] = useState('home');
 
   useEffect(() => {
     async function checkUser() {
@@ -42,8 +44,10 @@ function App() {
 
   return (
     <div className="app-container">
+      {username && <GlobalHeader onHomeClick={() => setView('home')} />}
       {!username && <OnboardingModal onSave={handleSetUsername} />}
-      {username && <Home username={username} />}
+      {username && view === 'home' && <Home username={username} />}
+      {/* Other views will be added here later */}
     </div>
   );
 }
