@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import localforage from 'localforage';
 import './PromptLibrary.css';
 
 const PromptLibrary = ({ onEditPrompt }) => {
-  const [prompts, setPrompts] = useState([]);
+  const [allPrompts, setAllPrompts] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [copyingId, setCopyingId] = useState(null);
@@ -15,7 +15,7 @@ const PromptLibrary = ({ onEditPrompt }) => {
   const loadPrompts = async () => {
     try {
       const savedPrompts = await localforage.getItem('pf_prompts') || [];
-      setPrompts(savedPrompts);
+      setAllPrompts(savedPrompts);
     } catch (error) {
       console.error('Error loading prompts:', error);
     } finally {
@@ -23,19 +23,18 @@ const PromptLibrary = ({ onEditPrompt }) => {
     }
   };
 
-  // --- Fuzzy Search Logic ---
-  const filteredPrompts = prompts.filter(prompt => {
+  // --- Derived Search State using useMemo to prevent duplication/accumulation bugs ---
+  const filteredPrompts = useMemo(() => {
     const query = searchQuery.toLowerCase().trim();
-    if (!query) return true;
+    if (!query) return allPrompts;
 
-    const nameMatch = prompt.name.toLowerCase().includes(query);
-    
-    // Compile all content into one string for searching
-    const fullContent = prompt.blocks.map(b => b.content).join(' ').toLowerCase();
-    const contentMatch = fullContent.includes(query);
-
-    return nameMatch || contentMatch;
-  });
+    return allPrompts.filter(prompt => {
+      const nameMatch = prompt.name.toLowerCase().includes(query);
+      const fullContent = prompt.blocks.map(b => b.content).join(' ').toLowerCase();
+      const contentMatch = fullContent.includes(query);
+      return nameMatch || contentMatch;
+    });
+  }, [allPrompts, searchQuery]);
 
   // --- Text Cleaning Logic for Snippets ---
   const getCleanSnippet = (blocks) => {
@@ -102,9 +101,9 @@ const PromptLibrary = ({ onEditPrompt }) => {
         </div>
       ) : (
         <div className="library-grid">
-          {filteredPrompts.map((prompt) => (
+          {filteredPrompts.map((prompt, index) => (
             <div 
-              key={prompt.name} 
+              key={`${prompt.name}-${index}`} 
               className="prompt-card" 
               onClick={() => onEditPrompt(prompt)}
             >
