@@ -1,38 +1,22 @@
-# Development Log - Prompt Factory
+# Prompt Factory - Development Log
 
-## [2026-05-17] - Initial Implementation: Home Page & Onboarding
+## Architecture Decisions
 
-### Thought Process
-- **Architecture**: Used a root `App` component to handle the global authentication state (username) via `localForage`.
-- **State Management**: Simple React `useState` and `useEffect` for managing the user's session.
-- **UI/UX**:
-    - Implemented a dark-theme minimalist aesthetic.
-    - Created an `OnboardingModal` that blocks the main UI until a username is provided, ensuring the "Welcome" experience is personalized from the start.
-    - Used `localForage` for asynchronous persistence of the username in IndexedDB.
-- **Styling**: Used a centralized `global.css` for theme variables and component-specific CSS files for modularity.
+### View Management
+Currently using a simple state-based routing (`view` state in `App.jsx`) to manage transitions between the Home Page and the Build Prompt Page. Given the local-first nature and minimalist scope, this avoids the overhead of a full routing library while keeping state transitions snappy.
 
-### Process Log
-1. Set up Vite project structure and installed `localforage`.
-2. Configured Global CSS with a strict black/white palette.
-3. Implemented `App.jsx` logic to check for `pf_username` on mount.
-4. Built `OnboardingModal` for first-time users.
-5. Developed the `Home` page with the requested layout:
-    - Centered welcome message.
-    - Central navigation box with two placeholder buttons.
-6. Added loading state to prevent UI flickering during IndexedDB read.
+### State Management for Build Prompt
+- **Blocks**: Managed as an array of objects `[{ id, title, content }]`. This allows for easy reordering, deletion, and mapping to the Markdown preview.
+- **Variables**: Managed as a key-value map `{ [variableName]: value }`. 
+- **Parsing**: Variable extraction is triggered specifically when switching to the Variables tab to ensure the UI remains performant during heavy typing in the Prompt tab.
 
-## [2026-05-17] - Global Header & Local Data Management
+### Storage Strategy
+Utilizing `localForage` (IndexedDB) for persisting prompts. Each prompt is stored as a structured object containing its metadata (name, version) and its structural blocks. Versioning is handled by cloning the object and incrementing a version counter.
 
-### Thought Process
-- **Global Header**: Implemented a fixed header that persists across the application (once the user is onboarded). This ensures the brand and data controls are always accessible.
-- **Data Portability**:
-    - **Export**: Created a function to iterate through all keys in `localForage`, aggregate them into a JSON object, and trigger a browser download. This gives users full ownership of their data.
-    - **Import**: Implemented a hidden file input that reads a JSON file and writes the contents back into IndexedDB. Used `window.location.reload()` to ensure the application state refreshes with the imported data.
-- **Navigation**: Added a `view` state to `App.jsx` to handle simple routing, allowing the brand logo to return the user to the 'home' view.
-- **Layout Adjustments**: Updated `Home.css` to ensure the central content is centered within the viewport remaining after the 60px header.
+---
 
-### Process Log
-1. Created `GlobalHeader` component with export/import logic.
-2. Integrated `GlobalHeader` into `App.jsx`, conditionally rendering it only after onboarding.
-3. Implemented JSON serialization/deserialization for local data backups.
-4. Adjusted `Home.css` to prevent the fixed header from overlapping the welcome message.
+## Process Log
+
+- **2026-05-17**: Initialized session to build the "Build Prompt Page".
+- **2026-05-17**: Planned component architecture: `BuildPrompt` page with `BlockEditor` and `LivePreview` sub-components.
+- **2026-05-17**: Implemented basic routing in `App.jsx` to allow navigation from `Home` to `BuildPrompt`.
