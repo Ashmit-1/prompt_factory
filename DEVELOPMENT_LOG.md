@@ -14,7 +14,7 @@ A local-first, serverless prompt engineering workspace.
 - [x] Build Prompt Workspace (Dynamic Blocks & Variable Parsing)
 - [x] Prompt Library Implementation (Current Task)
 
-## [2026-05-17] - Fix: Onboarding Modal Styling
+## [2026-05-19] - Fix: Onboarding Modal Styling
 
 ### Issue
 The onboarding modal had styling issues after recent CSS changes:
