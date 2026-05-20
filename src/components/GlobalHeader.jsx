@@ -73,7 +73,7 @@ const GlobalHeader = ({ onHomeClick, currentView, setView }) => {
         >
           <img
             src={logoImg}
-            alt="Prompt Factory Logo"
+            alt="Prompt Factree Logo"
             style={{
               width: "36px",
               height: "36px",
@@ -81,7 +81,7 @@ const GlobalHeader = ({ onHomeClick, currentView, setView }) => {
               borderRadius: "4px",
             }}
           />
-          <span className="app-name">Prompt Factory</span>
+          <span className="app-name">Prompt FacTree</span>
         </div>
       </div>
 
