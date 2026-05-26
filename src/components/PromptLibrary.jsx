@@ -7,6 +7,7 @@ const PromptLibrary = ({ onEditPrompt }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [copyingId, setCopyingId] = useState(null);
+  const [promptToDelete, setPromptToDelete] = useState(null);
 
   useEffect(() => {
     loadPrompts();
@@ -51,34 +52,27 @@ const PromptLibrary = ({ onEditPrompt }) => {
   };
 
   // --- Delete Logic ---
-  const handleDelete = async (e, prompt, index) => {
+  const handleDeleteClick = (e, prompt) => {
     e.stopPropagation(); // Prevent triggering the card click edit routing
+    setPromptToDelete(prompt); // Open the modal by setting the target prompt state
+  };
 
-    if (!window.confirm(`Are you sure you want to delete "${prompt.name}"?`)) {
-      return;
-    }
+  const executeDelete = async () => {
+    if (!promptToDelete) return;
 
     try {
       const currentPrompts = await localforage.getItem('pf_prompts') || [];
-      
-      // Use reference equality to find the exact object in the main array
-      const actualIndex = currentPrompts.findIndex(p => p === prompt);
-      
-      if (actualIndex !== -1) {
-        const updatedPrompts = currentPrompts.filter((_, i) => i !== actualIndex);
-        await localforage.setItem('pf_prompts', updatedPrompts);
-        setAllPrompts(updatedPrompts);
-      } else {
-        // Fallback: filter by name and version if reference equality fails across storage cycles
-        const updatedPrompts = currentPrompts.filter(p => 
-          !(p.name === prompt.name && p.version === prompt.version)
-        );
-        await localforage.setItem('pf_prompts', updatedPrompts);
-        setAllPrompts(updatedPrompts);
-      }
+
+      // Fallback-safe approach: Filter out the prompt matching name and version
+      const updatedPrompts = currentPrompts.filter(p =>
+        !(p.name === promptToDelete.name && p.version === promptToDelete.version)
+      );
+
+      await localforage.setItem('pf_prompts', updatedPrompts);
+      setAllPrompts(updatedPrompts);
+      setPromptToDelete(null); // Close the modal on success
     } catch (error) {
       console.error('Error deleting prompt:', error);
-      alert('Failed to delete prompt. Please try again.');
     }
   };
 
@@ -143,7 +137,7 @@ const PromptLibrary = ({ onEditPrompt }) => {
                 <h3 className="card-title">{prompt.name}</h3>
                 <button 
                   className="card-delete-btn" 
-                  onClick={(e) => handleDelete(e, prompt, index)}
+                  onClick={(e) => handleDeleteClick(e, prompt)}
                   title="Delete Prompt"
                 >
                   🗑️
@@ -162,6 +156,30 @@ const PromptLibrary = ({ onEditPrompt }) => {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {promptToDelete && (
+        <div className="modal-overlay">
+          <div className="modal-card">
+            <p className="modal-message">
+              Are you sure you want to delete <strong>{promptToDelete.name}</strong>?
+            </p>
+            <div className="modal-actions">
+              <button 
+                className="btn-cancel" 
+                onClick={() => setPromptToDelete(null)}
+              >
+                Cancel
+              </button>
+              <button 
+                className="btn-delete" 
+                onClick={executeDelete}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
